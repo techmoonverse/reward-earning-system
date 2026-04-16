@@ -23,13 +23,6 @@ class RateLimit {
     }
 
     public function increment(string $ip, string $action): void {
-        // Try to update existing window record
-        $stmt = $this->db->prepare(
-            'INSERT INTO rate_limit (ip_address, action, attempts, window_start)
-             VALUES (?, ?, 1, NOW())
-             ON DUPLICATE KEY UPDATE attempts = attempts + 1'
-        );
-        // Since there's no unique key, just insert a new row
         $this->db->prepare(
             'INSERT INTO rate_limit (ip_address, action, attempts, window_start) VALUES (?,?,1,NOW())'
         )->execute([$ip, $action]);

@@ -32,6 +32,10 @@ class Mailer {
     }
 
     private function send(string $to, string $subject, string $htmlBody): bool {
+        // Validate recipient to prevent email header injection
+        if (!filter_var($to, FILTER_VALIDATE_EMAIL) || preg_match('/[\r\n]/', $to)) {
+            return false;
+        }
         // Use PHP's mail() as fallback; in production replace with PHPMailer/SMTP
         $headers = [
             'MIME-Version: 1.0',

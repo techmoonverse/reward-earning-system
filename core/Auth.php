@@ -154,11 +154,13 @@ class Auth {
     }
 
     private function incrementLoginAttempts(int $userId): void {
+        $maxAttempts = defined('LOGIN_MAX_ATTEMPTS') ? LOGIN_MAX_ATTEMPTS : 5;
+        $lockoutMinutes = defined('LOGIN_LOCKOUT_MINUTES') ? LOGIN_LOCKOUT_MINUTES : 30;
         $this->db->prepare(
-            'UPDATE users SET login_attempts = login_attempts + 1,
-             locked_until = IF(login_attempts + 1 >= 5, DATE_ADD(NOW(), INTERVAL 30 MINUTE), NULL)
-             WHERE id = ?'
-        )->execute([$userId]);
+            "UPDATE users SET login_attempts = login_attempts + 1,
+             locked_until = IF(login_attempts + 1 >= ?, DATE_ADD(NOW(), INTERVAL ? MINUTE), NULL)
+             WHERE id = ?"
+        )->execute([$maxAttempts, $lockoutMinutes, $userId]);
     }
 
     private function generateReferralCode(): string {

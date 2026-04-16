@@ -28,6 +28,10 @@ define('STREAK_MILESTONES', [7=>100, 30=>500, 100=>2000]);
 // Rate limiting
 define('RATE_LIMIT_TASK_PER_HOUR', 5);
 
+// Login lockout policy
+define('LOGIN_MAX_ATTEMPTS', 5);
+define('LOGIN_LOCKOUT_MINUTES', 30);
+
 // Task anti-cheat: minimum % of declared duration that must pass
 define('TASK_MIN_DURATION_RATIO', 0.85);
 
